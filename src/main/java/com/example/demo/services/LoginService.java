@@ -1,12 +1,10 @@
 package com.example.demo.services;
 
-import com.example.demo.LoginForm;
+import com.example.demo.dto.LoginForm;
 import com.example.demo.entities.User;
-import com.example.demo.repositories.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,7 +32,7 @@ public class LoginService {
             long timeMillis = System.currentTimeMillis();
             String token = Jwts.builder()
                     .issuedAt(new Date(timeMillis))
-                    .expiration(new Date(timeMillis+5*60*1000))
+                    .expiration(new Date(timeMillis+5*60*1000*100)) //zzmien to * 100 to tylko do testow
                     .claim("id", user.getUserId())
                     .claim("role", user.getRole())
                     .signWith(SignatureAlgorithm.HS256, key)

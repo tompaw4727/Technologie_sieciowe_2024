@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.LoginForm;
+import com.example.demo.dto.LoginForm;
 import com.example.demo.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,6 @@
 package com.example.demo.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.sql.Date;
 
@@ -12,8 +9,12 @@ public class Review {
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private Integer reviewId;
-    private Integer bookId;
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     private Integer score;
     private String comment;
     private Date reviewDate;
@@ -26,20 +27,20 @@ public class Review {
         this.reviewId = reviewId;
     }
 
-    public Integer getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getScore() {

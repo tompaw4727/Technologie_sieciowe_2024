@@ -1,6 +1,11 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.User;
+import com.example.demo.exceptions.NotEnoughStrongPasswordException;
+import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptions.UserWithThatMailAlreadyExistException;
+import com.example.demo.exceptions.UserWithThatUsernameAlreadyExistException;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.security.PasswordConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +28,84 @@ public class UserService {
     }
 
     public User addUser(User user) {
-        user.setPassword(passwordConfig.passwordEncoder().encode(user.getPassword()));
-        return userRepository.save(user);
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new UserWithThatUsernameAlreadyExistException("User with that username already exists in database.");
+        }else if (userRepository.existsByUserMail(user.getUserMail())) {
+            throw new UserWithThatMailAlreadyExistException("User with that mail already exists in database.");
+
+        }else if (!checkIfPasswordIsStrong(user.getPassword())) {
+            throw new NotEnoughStrongPasswordException("Password is not strong enough");
+        } else {
+            user.setPassword(passwordConfig.passwordEncoder().encode(user.getPassword()));
+
+            return userRepository.save(user);
+        }
+
     }
 
     public List<User> getAllUsers () {
         return userRepository.findAll();
     }
 
-    public User getUserByUsername(String userName) {
-        Optional<User> optionalUser = userRepository.findByUsername(userName);
+    public User getUserByUsername(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
         return optionalUser.orElse(null);
+    }
+
+    public String updateUser(Integer userId, UserDTO userDTO) {
+        User user  = userRepository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException("User with that Id doesn't exists in database"));
+
+
+        if (userDTO.getUsername() != null) {
+            if (!user.getUsername().equals(userDTO.getUsername()) && userRepository.existsByUsername(userDTO.getUsername())) {
+                throw new UserWithThatUsernameAlreadyExistException("User with that username already exists in the database.");
+            }
+            user.setUsername(userDTO.getUsername());
+        }
+
+        if (userDTO.getPassword() != null) {
+            if (!checkIfPasswordIsStrong(userDTO.getPassword())) {
+                throw new NotEnoughStrongPasswordException("Password is not strong enough");
+            }
+            user.setPassword(passwordConfig.passwordEncoder().encode(userDTO.getPassword()));
+        }
+
+        if(userDTO.getRole() == null) {
+            user.setRole(user.getRole());
+        }else {
+            user.setRole(userDTO.getRole());
+        }
+
+        if(userDTO.getUserMail() != null) {
+            if (!user.getUserMail().equals(userDTO.getUserMail()) && userRepository.existsByUserMail(userDTO.getUserMail())) {
+                throw new UserWithThatMailAlreadyExistException("User with that mail already exists in database.");
+            }
+            user.setUserMail(userDTO.getUserMail());
+        }
+
+        if(userDTO.getFullName() == null) {
+            user.setFullName(user.getFullName());
+        }else {
+            user.setFullName(userDTO.getFullName());
+        }
+
+        if(userDTO.getLoans() == null) {
+            user.setLoans(user.getLoans());
+        }else {
+            user.setLoans(userDTO.getLoans());
+        }
+
+        if(userDTO.getReviews() == null) {
+            user.setReviews(user.getReviews());
+        }else {
+            user.setReviews(userDTO.getReviews());
+        }
+
+
+
+        return "Succesfully updated user with Id:  " + userId;
+
     }
 
     public String deleteUser(Integer userId) {
@@ -46,21 +118,6 @@ public class UserService {
         return !userRepository.existsById(Id);
     }
 
-    public boolean checkIfUserExistByUsername(String userName){
-        if (userRepository.usersWithSameUsername(userName) > 0 ) {
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    public boolean checkIfUserExistByMail(String userMail){
-        if (userRepository.usersWithSameMail(userMail) > 0 ) {
-            return true;
-        }else {
-            return false;
-        }
-    }
 
     public boolean checkIfPasswordIsStrong(String password) {
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=!_()\\\\-]).+$";

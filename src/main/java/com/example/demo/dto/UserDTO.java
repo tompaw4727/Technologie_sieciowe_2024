@@ -1,38 +1,28 @@
-package com.example.demo.entities;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
+import com.example.demo.entities.Loan;
+import com.example.demo.entities.Review;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 
 import java.util.Set;
 
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
-    private Integer userId;
+public class UserDTO {
     private String username;
     private String password;
     private String role;
     private String userMail;
     private String fullName;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Loan> loans;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Review> reviews;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getPassword() {
@@ -83,4 +73,3 @@ public class User {
         this.reviews = reviews;
     }
 }
-

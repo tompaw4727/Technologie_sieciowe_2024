@@ -13,13 +13,13 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    @Query("SELECT u FROM User u WHERE u.userName = ?1")
-    Optional<User> findByUsername(String userName);
+    @Query("SELECT u FROM User u WHERE u.username = ?1")
+    Optional<User> findByUsername(String username);
 
-    @Query("SELECT COUNT(u.userId) From User u WHERE u.userName = ?1")
-    Integer usersWithSameUsername(String userName);
+    @Query("SELECT CASE WHEN COUNT(u.userId) > 0 THEN true ELSE false END FROM User u WHERE u.username = ?1")
+    Boolean existsByUsername(String username);
 
-    @Query("SELECT COUNT(u.userId) From User u WHERE u.userMail = ?1")
-    Integer usersWithSameMail(String userMaile);
+    @Query("SELECT CASE WHEN COUNT(u.userId) > 0 THEN true ELSE false END FROM User u WHERE u.userMail = ?1")
+    Boolean existsByUserMail(String userMail);
 
 }

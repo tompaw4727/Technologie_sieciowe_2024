@@ -1,34 +1,12 @@
-package com.example.demo.entities;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
-
-import java.util.Set;
-
-@Entity
-public class Book {
-    @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
-    private Integer id;
-
+public class BookDTO {
     private String isbn;
     private String title;
     private String author;
     private String publisher;
     private Integer publishYear;
     private Integer availableCopies;
-
-    @OneToMany(mappedBy="book", cascade = CascadeType.ALL)
-    private Set<Loan> loans;
-    @OneToMany(mappedBy="book", cascade = CascadeType.ALL)
-    private Set<Review> reviews;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getIsbn() {
         return isbn;
@@ -76,21 +54,5 @@ public class Book {
 
     public void setAvailableCopies(Integer availableCopies) {
         this.availableCopies = availableCopies;
-    }
-
-    public Set<Loan> getLoans() {
-        return loans;
-    }
-
-    public void setLoans(Set<Loan> loans) {
-        this.loans = loans;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
     }
 }

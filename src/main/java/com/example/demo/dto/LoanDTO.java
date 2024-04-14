@@ -1,31 +1,20 @@
-package com.example.demo.entities;
+package com.example.demo.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.demo.entities.Book;
+import com.example.demo.entities.User;
 import jakarta.persistence.*;
 
 import java.sql.Date;
 
-@Entity
-public class Loan {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer loanId;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    @JsonIgnore
-    private Book book;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User user;
-
+public class LoanDTO {
+    private Integer bookId;
+    private Integer userId;
     private Date borrowDate;
     private Date dueDate;
     private Date returnDate;
 
     private String Status;
+
 
     public String getStatus() {
         return Status;
@@ -35,28 +24,20 @@ public class Loan {
         Status = status;
     }
 
-    public Integer getLoanId() {
-        return loanId;
+    public Integer getBookId() {
+        return bookId;
     }
 
-    public void setLoanId(Integer loanId) {
-        this.loanId = loanId;
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
     }
 
-    public Book getBook() {
-        return book;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Date getBorrowDate() {

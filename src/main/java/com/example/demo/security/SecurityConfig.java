@@ -27,10 +27,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizationManagerRequestMatcherRegistry ->
                                 authorizationManagerRequestMatcherRegistry
-//                                        .anyRequest().permitAll()
                                         .requestMatchers("/login").permitAll()
-                                        .requestMatchers("/book").hasRole("USER")
+                                        .requestMatchers("/book/search").hasRole("USER")
+                                        .requestMatchers("/loan/add").hasRole("USER")
+                                        .requestMatchers("/loan/history/**").hasRole("USER")
+                                        .requestMatchers("/review/add").hasRole("USER")
                                         .requestMatchers("/user/**").hasRole("EMPLOYEE")
+                                        .requestMatchers("/book/**").hasRole("EMPLOYEE")
+                                        .requestMatchers("/loan/acceptloan/**").hasRole("EMPLOYEE")
+                                        .requestMatchers("/loan/acceptreturn/**").hasRole("EMPLOYEE")
                 )
                 .sessionManagement( sessionMenegment ->
                         sessionMenegment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
