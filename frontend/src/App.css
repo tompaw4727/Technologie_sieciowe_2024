@@ -6,12 +6,12 @@ body {
 
 .Book-list {
 	margin: 5rem auto 0;
-  display: flex; /* Ustawienie kontenera na flexbox */
-  flex-direction: column; /* Ustawienie kierunku elementów na kolumnę */
-  align-items: center; /* Wyśrodkowanie elementów w pionie */
+  
   justify-content: center; /* Wyśrodkowanie elementów w poziomie */
   gap: 2rem;
   margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .Login-form {
