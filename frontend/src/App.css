@@ -1,14 +1,22 @@
 body {
   background-color: #f0f0ef;
-  
 }
 
-
 .Book-list {
-	margin: 5rem auto 0;
-  
+  margin: 5rem auto 0;
+
   justify-content: center; /* Wyśrodkowanie elementów w poziomie */
-  gap: 2rem;
+  gap: 5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Loan-list {
+  margin: 5rem auto 0;
+
+  justify-content: center; /* Wyśrodkowanie elementów w poziomie */
+  gap: 5rem;
   margin-bottom: 2rem;
   display: flex;
   flex-wrap: wrap;
@@ -26,15 +34,13 @@ body {
 
 .Card-content {
   background-color: #faf0e8;
-  
 }
 
 button.Normal-button {
   background-color: #eabc92;
-  color:#93551d;
+  color: #93551d;
   border-radius: 0.75rem;
   margin-bottom: 0.3rem;
-
 }
 
 .Navbar {
@@ -43,10 +49,31 @@ button.Normal-button {
 }
 
 .Info-description {
-  background-color:#eabc92;
-  color:#93551d;
+  background-color: #eabc92;
+  color: #93551d;
   border-radius: 0.5rem;
   padding: 0.25rem;
-  
 }
 
+.Grid-container {
+  background-color: #faf0e8;
+  padding: 2rem;
+  border-radius: 2rem;
+}
+
+.button-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 3rem;
+}
+
+button.Main-page-button {
+  background-color: #eabc92;
+  color: #93551d;
+  border-radius: 0.75rem;
+  margin-bottom: 0.3rem;
+  font-size: 1.5rem;
+}

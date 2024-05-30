@@ -1,8 +1,8 @@
 import LoginForm from './components/LoginForm';
 import HomePage from './components/HomePage';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import BookCard from './components/BookCard';
 import BooksList from './components/BooksList';
+import LoanList from './components/LoanList';
 
 function App() {
   return (
@@ -13,6 +13,7 @@ function App() {
       </Route>
       <Route path="/login" element={<LoginForm />} />
       <Route path="/books" element={<BooksList />} />
+      <Route path="/loans" element={<LoanList />} />
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="*" element={<h1>404</h1>} />
     </Routes>
