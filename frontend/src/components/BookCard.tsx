@@ -12,25 +12,30 @@ import {
   Typography,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MenuAppBar from './MenuAppBar';
+import { useTranslation } from 'react-i18next';
 
 interface Book {
-  img: string;
+  id: number;
+  isbn: string;
   title: string;
   author: string;
-  summary: string;
   publisher: string;
   publishYear: number;
-  type: string;
-  isbn: string;
-  rate: number;
   availableCopies: number;
+  coverImageUrl: string;
+  summary: string;
+  score: number;
+  type: string;
 }
 
-function BookCard({ book }: { book: Book }) {
+function BookCard({ book, addToCart }: { book: Book; addToCart: (id: number) => void }) {
   const [expandedSummary, setExpandedSummary] = useState(false);
   const [expandedMoreInfo, setExpandedMoreInfo] = useState(false);
+  const {t, i18n} = useTranslation()
+
+
 
   const handleExpandSummaryClick = () => {
     setExpandedSummary(!expandedSummary);
@@ -40,14 +45,19 @@ function BookCard({ book }: { book: Book }) {
     setExpandedMoreInfo(!expandedMoreInfo);
   };
 
+  const handleAddToCartClick = () => {
+    addToCart(book.id);
+  }
+
+
   return (
     <Box
       className="Book-card"
       sx={{ maxWidth: 400, width: '100%', borderRadius: '1.5rem' }}
     >
-      <MenuAppBar />
+      
       <Card sx={{ borderRadius: '1.5rem', border: '2px solid #e2dfdd' }}>
-        <CardMedia sx={{ height: 400 }} image={book.img} title={book.title} />
+        <CardMedia sx={{ height: 400 }} image={book.coverImageUrl} title={book.title} />
         <CardContent className="Card-content" sx={{ py: 1 }}>
           <Typography gutterBottom variant="h4" component="div">
             {book.title}
@@ -57,17 +67,18 @@ function BookCard({ book }: { book: Book }) {
           </Typography>
           <Rating
             name="read-only"
-            value={book.rate}
+            value={book.score}
             readOnly
             sx={{ mt: 0, ml: 0 }}
             size="large"
           />
+          <Typography variant="body2">{t("score")}: {book.score} </Typography>
         </CardContent>
         <CardContent className="Card-content" sx={{ py: "0.5rem" }}>
           <Grid container alignItems="center">
             <Grid item>
               <Typography variant="body1" color="text.secondary">
-                Summary
+                {t("summary")}
               </Typography>
             </Grid>
             <Grid item xs={2}>
@@ -91,7 +102,7 @@ function BookCard({ book }: { book: Book }) {
           <Grid container alignItems="center">
             <Grid item>
               <Typography variant="body1" color="text.secondary">
-                More info
+                {t("moreInfo")}
               </Typography>
             </Grid>
             <Grid item xs={2}>
@@ -109,28 +120,28 @@ function BookCard({ book }: { book: Book }) {
         <Collapse in={expandedMoreInfo} timeout="auto" unmountOnExit>
           <CardContent className="Card-content" sx={{ padding: '0.25rem 1rem' }}>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Type:</span> {book.type}
+              <span className="Info-description">{t("type")}:</span> {book.type}
             </Typography>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Publish Year:</span>{' '}
+              <span className="Info-description">{t("publishYear")}:</span>{' '}
               {book.publishYear}
             </Typography>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Publisher:</span>{' '}
+              <span className="Info-description">{t("publisher")}:</span>{' '}
               {book.publisher}
             </Typography>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Isbn:</span> {book.isbn}
+              <span className="Info-description">{t("isbn")}:</span> {book.isbn}
             </Typography>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Available copies:</span>{' '}
+              <span className="Info-description">{t("availableCopies")}:</span>{' '}
               {book.availableCopies}
             </Typography>
           </CardContent>
         </Collapse>
         <CardActions className="Card-content" sx={{ justifyContent: 'center' }}>
-          <Button className="Normal-button" size="large">
-            Add to cart
+          <Button className="Normal-button" size="large" onClick={handleAddToCartClick}>
+          {t("addToCart")}
           </Button>
         </CardActions>
       </Card>

@@ -1,16 +1,14 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.BookDTO;
+import com.example.demo.dto.BookInfoDTO;
 import com.example.demo.entities.Book;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -119,5 +117,15 @@ public class BookService {
         }
 
         return booksList;
+    }
+
+    public Collection<BookInfoDTO> getAllBooksInfo() {
+
+        return bookRepository.getAllBooksInfo();
+    }
+
+    public String getBookTitleById(Integer bookId) {
+        return bookRepository.findBookTitleByID(bookId);
+
     }
 }

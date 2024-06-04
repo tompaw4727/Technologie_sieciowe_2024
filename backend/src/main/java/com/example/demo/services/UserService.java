@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.UserAddForm;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.User;
 import com.example.demo.exceptions.NotEnoughStrongPasswordException;
@@ -27,18 +28,26 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User addUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
+    public String addUser(UserAddForm userAddForm) {
+        if (userRepository.existsByUsername(userAddForm.getUsername())) {
             throw new UserWithThatUsernameAlreadyExistException("User with that username already exists in database.");
-        }else if (userRepository.existsByUserMail(user.getUserMail())) {
+        }else if (userRepository.existsByUserMail(userAddForm.getUserMail())) {
             throw new UserWithThatMailAlreadyExistException("User with that mail already exists in database.");
 
-        }else if (!checkIfPasswordIsStrong(user.getPassword())) {
+        }else if (!checkIfPasswordIsStrong(userAddForm.getPassword())) {
             throw new NotEnoughStrongPasswordException("Password is not strong enough");
         } else {
-            user.setPassword(passwordConfig.passwordEncoder().encode(user.getPassword()));
+            userAddForm.setPassword(passwordConfig.passwordEncoder().encode(userAddForm.getPassword()));
 
-            return userRepository.save(user);
+            User user = new User();
+            user.setUsername(userAddForm.getUsername());
+            user.setPassword(userAddForm.getPassword());
+            user.setUserMail(userAddForm.getUserMail());
+            user.setFullName(userAddForm.getFullName());
+            user.setRole(userAddForm.getRole());
+
+            userRepository.save(user);
+            return "User succesfully added";
         }
 
     }

@@ -14,18 +14,20 @@ import React, { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import BookmarkAddedSharpIcon from '@mui/icons-material/BookmarkAddedSharp';
 import MenuAppBar from './MenuAppBar';
+import { useTranslation } from 'react-i18next';
 //Zdjecia pogladowe na pewno je zmienie
 import ReturnedImage from '../resources/accept.png';
 import ActiveImage from '../resources/time-left.png';
 
-interface Loan {
-  status: string;
-  borrowDate: string;
-  dueDate: string;
+type Loan = {
+  loanId: number;
   bookId: number;
   userId: number;
-  id: number;
-}
+  borrowDate: string;
+  dueDate: string;
+  returnDate: string;
+  status: string;
+};
 
 function LoanCard({ loan }: { loan: Loan }) {
   const [expandedMoreInfo, setExpandedMoreInfo] = useState(false);
@@ -34,14 +36,21 @@ function LoanCard({ loan }: { loan: Loan }) {
     Returned: ReturnedImage,
   };
   const [loanStatus, setLoanStatus] = useState<Loan['status']>(loan.status);
+  const { t, i18n } = useTranslation();
 
   const handleExpandMoreInfoClick = () => {
     setExpandedMoreInfo(!expandedMoreInfo);
   };
 
   const handleChangeStatusClick = () => {
-    const newStatus = loanStatus === 'Active' ? 'Returned' : 'Active';
-    setLoanStatus(newStatus);
+    fetch(`http://localhost:8080/loan/changeStatus?loanId=${loan.loanId}`, {
+      method: 'PUT',
+    })
+      .then((response) => response.text())
+      .then((data) => setLoanStatus(data))
+      .catch((error) =>
+        console.error('Error fetching possible causes:', error),
+      );
   };
 
   return (
@@ -49,7 +58,6 @@ function LoanCard({ loan }: { loan: Loan }) {
       className="Book-card"
       sx={{ maxWidth: 250, width: '100%', borderRadius: '1.5rem' }}
     >
-      <MenuAppBar />
       <Card sx={{ borderRadius: '1.5rem', border: '2px solid #e2dfdd' }}>
         <CardMedia
           sx={{ height: 140 }}
@@ -58,7 +66,7 @@ function LoanCard({ loan }: { loan: Loan }) {
         />
         <CardContent className="Card-content" sx={{ py: 1 }}>
           <Typography gutterBottom variant="h4" component="div">
-          Loan ID: {loan.id}
+            {t('loan')} ID: {loan.loanId}
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
             Status: {loanStatus}
@@ -66,7 +74,7 @@ function LoanCard({ loan }: { loan: Loan }) {
           <Grid container alignItems="center">
             <Grid item>
               <Typography variant="body1" color="text.secondary">
-                More info
+                {t('moreInfo')}
               </Typography>
             </Grid>
             <Grid item xs={2}>
@@ -87,17 +95,24 @@ function LoanCard({ loan }: { loan: Loan }) {
             sx={{ padding: '0.25rem 1rem' }}
           >
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Book ID:</span> {loan.bookId}
+              <span className="Info-description">{t('book')} ID:</span>{' '}
+              {loan.bookId}
             </Typography>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">User ID:</span> {loan.userId}
+              <span className="Info-description">{t('reader')} ID:</span>{' '}
+              {loan.userId}
             </Typography>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Borrow Date:</span>{' '}
+              <span className="Info-description">{t('borrowDate')}:</span>{' '}
               {loan.borrowDate}
             </Typography>
             <Typography paragraph sx={{ mb: '0.5rem' }}>
-              <span className="Info-description">Due Date:</span> {loan.dueDate}
+              <span className="Info-description">{t('dueDate')}:</span>{' '}
+              {loan.dueDate}
+            </Typography>
+            <Typography paragraph sx={{ mb: '0.5rem' }}>
+              <span className="Info-description">{t('returnDate')}:</span>{' '}
+              {loan.returnDate}
             </Typography>
           </CardContent>
         </Collapse>
@@ -107,7 +122,7 @@ function LoanCard({ loan }: { loan: Loan }) {
             size="large"
             onClick={handleChangeStatusClick}
           >
-            Change status
+            {t('changeStatus')}
           </Button>
         </CardActions>
       </Card>

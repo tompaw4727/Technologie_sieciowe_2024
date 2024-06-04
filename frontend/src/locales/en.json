@@ -1,0 +1,22 @@
+{
+  "library": "Library",
+  "summary": "Summary",
+  "moreInfo": "More Info",
+  "type": "Type",
+  "publishYear": "Publish Year",
+  "publisher": "Publisher",
+  "isbn": "Isbn",
+  "availableCopies": "Available Copies",
+  "addToCart": "Add to cart",
+  "score": "Score",
+  
+  "loan": "Loan",
+  "book": "book",
+  "reader": "Reader",
+  "borrowDate": "Borrow Date",
+  "dueDate": "Due Date",
+  "returnDate": "Return Date",
+  "changeStatus": "Change Status"
+
+
+}

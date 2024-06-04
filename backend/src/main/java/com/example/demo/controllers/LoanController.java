@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/loan")
 public class LoanController {
@@ -35,11 +37,14 @@ public class LoanController {
     }
 
     //akceptacja zwrotu ksiazki (ustawienie return date na dzisiejsza date)
-    @PutMapping("/acceptreturn/{loanId}")
+    @PutMapping("/changeStatus")
     @Transactional
-    public String acceptReturn(@PathVariable("loanId") Integer loanId) {
+    @CrossOrigin(origins = "http://localhost:3000")
+    public String acceptReturn(@RequestParam Integer loanId) {
 
-        return loanService.acceptReturn(loanId);
+        loanService.acceptReturn(loanId);
+
+        return loanService.getLoan(loanId).getStatus();
 
     }
 
@@ -53,4 +58,19 @@ public class LoanController {
     public @ResponseBody Iterable<Loan> getAllLoans(){
         return loanService.getAllLoans();
     }
+
+    @GetMapping("/getAllLoansInfo")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public Collection<LoanDTO> getAllLoansInfo(){
+        return loanService.getAllLoansInfo();
+    }
+
+    @PostMapping("/addMultipleLoans")
+    @Transactional
+    @CrossOrigin(origins = "http://localhost:3000")
+    public String addMultipleLoans( @RequestBody Integer[] bookIds) {
+        return loanService.AddMultipleLoans(bookIds);
+    }
+
+
 }

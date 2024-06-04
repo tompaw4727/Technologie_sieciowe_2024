@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.util.Optional;
 
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.username = ?1")

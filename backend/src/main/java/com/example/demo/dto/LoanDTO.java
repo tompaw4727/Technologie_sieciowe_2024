@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 public class LoanDTO {
+    private Integer loanId;
     private Integer bookId;
     private Integer userId;
     private Date borrowDate;
@@ -15,13 +16,30 @@ public class LoanDTO {
 
     private String Status;
 
+    public LoanDTO(Integer loanId, Integer bookId, Integer userId, Date borrowDate, Date dueDate, Date returnDate, String status) {
+        this.loanId = loanId;
+        this.bookId = bookId;
+        this.userId = userId;
+        this.borrowDate = borrowDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+        this.Status = status;
+    }
+
+    public Integer getLoanId() {
+        return loanId;
+    }
+
+    public void setLoanId(Integer loanId) {
+        this.loanId = loanId;
+    }
 
     public String getStatus() {
         return Status;
     }
 
     public void setStatus(String status) {
-        Status = status;
+        this.Status = status;
     }
 
     public Integer getBookId() {

@@ -1,0 +1,20 @@
+{
+  "library": "Biblioteka",
+  "summary": "Streszczenie",
+  "moreInfo": "Więcej Informacji",
+  "type": "Typ",
+  "publishYear": "Rok Publikacji",
+  "publisher": "Wydawca",
+  "isbn": "Isbn",
+  "availableCopies": "Dostępne egzemplarze",
+  "addToCart": "Dodaj do koszyka",
+  "score": "Ocena",
+
+  "loan": "Wypożyczenie",
+  "book": "Książka",
+  "reader": "Czytelnik",
+  "borrowDate": "Data wypożyczenia",
+  "dueDate": "Termin oddania",
+  "returnDate": "Data oddania",
+  "changeStatus": "Zmień status"
+}

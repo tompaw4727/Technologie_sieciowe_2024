@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.UserAddForm;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.User;
 import com.example.demo.exceptions.NotEnoughStrongPasswordException;
@@ -24,10 +25,11 @@ public class UserController {
     }
 
     @PostMapping("/add")
+    @CrossOrigin(origins = "http://localhost:3000")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public @ResponseBody User addUser(@RequestBody User user) {
-
-        return userService.addUser(user);
+    public @ResponseBody String addUser(@RequestBody UserAddForm userAddForm) {
+        userService.addUser(userAddForm);
+        return "User succesfully added";
     }
 
     @PutMapping("/update/{userId}")

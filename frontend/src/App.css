@@ -5,7 +5,7 @@ body {
 .Book-list {
   margin: 5rem auto 0;
 
-  justify-content: center; /* Wyśrodkowanie elementów w poziomie */
+  justify-content: center;
   gap: 5rem;
   margin-bottom: 2rem;
   display: flex;
@@ -15,7 +15,7 @@ body {
 .Loan-list {
   margin: 5rem auto 0;
 
-  justify-content: center; /* Wyśrodkowanie elementów w poziomie */
+  justify-content: center;
   gap: 5rem;
   margin-bottom: 2rem;
   display: flex;
@@ -23,12 +23,17 @@ body {
 }
 
 .Login-form {
-  padding: 5rem;
-  margin-top: 5%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 2rem;
+  align-items: center;
+}
+.User-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
   align-items: center;
 }
 
@@ -76,4 +81,19 @@ button.Main-page-button {
   border-radius: 0.75rem;
   margin-bottom: 0.3rem;
   font-size: 1.5rem;
+}
+
+div.Form-box {
+  backgroundcolor: '#faf0e8;';
+  padding-right: '6rem';
+  padding-left: '6rem';
+  padding-top: '1rem';
+  padding-bottom: '1rem';
+  border-radius: '1.5rem';
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  width: 'auto';
+  margin-top: '2rem';
+  margin-bottom: '2rem';
 }
