@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CardModalProps {
   open: boolean;
@@ -32,6 +33,7 @@ export default function CardModal({
   books,
   updateBooksInCart,
 }: CardModalProps) {
+  const { t, i18n } = useTranslation();
   const [bookData, setBookData] = useState<{ id: number; title: string }[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -58,10 +60,12 @@ export default function CardModal({
     );
   };
 
+  const userId = localStorage.getItem("userId");
+
   const handleCheckoutClick = () => {
     const bookIds = bookData.map((book) => book.id);
-    console.log(bookIds);
-    fetch('http://localhost:8080/loan/addMultipleLoans', {
+  
+    fetch(`http://localhost:8080/loan/addMultipleLoans?userId=${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +74,7 @@ export default function CardModal({
     })
       .then((response) => {
         if (response.ok) {
-          setDialogOpen(true); // Wyświetl okno dialogowe po pomyślnym wykonaniu żądania
+          setDialogOpen(true);
           return response.text();
         } else {
           throw new Error('Network response was not ok');
@@ -117,7 +121,7 @@ export default function CardModal({
             mb={2}
             sx={{ color: '#93551d' }}
           >
-            Books in Cart
+            {t('booksInCart')}
           </Typography>
           <List>
             {bookData.map((book, index) => (
@@ -137,7 +141,7 @@ export default function CardModal({
             size="large"
             onClick={handleCheckoutClick}
           >
-            Checkout
+            {t('checkout')}
           </Button>
         </Box>
       </Modal>
@@ -147,10 +151,10 @@ export default function CardModal({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'Success'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{t('success')}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Books have been successfully borrowed.
+          {t('borrwoSuccess')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

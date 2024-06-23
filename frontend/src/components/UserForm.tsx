@@ -1,8 +1,8 @@
 import '../App.css';
-import { TextField, Button, Box, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { TextField, Button, Box, Snackbar, Alert, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { Formik, FormikHelpers } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import MenuAppBar from './MenuAppBar';
@@ -17,19 +17,22 @@ interface UserAddFormValues {
   userMail: string;
 }
 
-
+type Severity = 'success' | 'error' | 'info' | 'warning';
 
 function UserForm() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    Severity | undefined
+  >(undefined);
 
-  const navigate = useNavigate();
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const onSubmit = useCallback(
     (values: UserAddFormValues, formik: FormikHelpers<UserAddFormValues>) => {
-      // console.log('Submitted values:', values);
-      // const jsonData = JSON.stringify(values);
-      // console.log('Request body:', jsonData);
-
-
-
+      
       fetch('http://localhost:8080/user/add', {
         method: 'POST',
         headers: {
@@ -41,18 +44,23 @@ function UserForm() {
           if (response.ok) {
             return response.text();
           } else {
-            throw new Error('Login failed');
+            return response.json().then((error) => {
+              throw new Error(error.message || "Invalid input, please try again");
+            });
           }
         })
-        .then((token) => {
-          localStorage.setItem('token', token);
-          navigate('/home');
+        .then((text) => {
+          setSnackbarMessage('User added successfully');
+          setSnackbarSeverity('success');
+          setSnackbarOpen(true);
         })
         .catch((error) => {
-          alert('Wrong login or password');
+          setSnackbarMessage('Error: ' + error.message);
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
         });
     },
-    [navigate],
+    [],
   );
 
   const validationSchema = useMemo(
@@ -188,8 +196,8 @@ function UserForm() {
                   }
                   label="User Role"
                 >
-                  <MenuItem value="ROLE_USER">USER</MenuItem>
-                  <MenuItem value="ROLE_READER">READER</MenuItem>
+                  <MenuItem value="ROLE_USER">READER</MenuItem>
+                  <MenuItem value="ROLE_EMPLOYEE">EMPLOYEE</MenuItem>
                 </Select>
               </FormControl>
               <Button
@@ -208,6 +216,19 @@ function UserForm() {
         )}
       </Formik>
     </Box>
+    <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
     
   );

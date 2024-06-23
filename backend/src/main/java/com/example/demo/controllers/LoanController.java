@@ -54,9 +54,11 @@ public class LoanController {
 
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getAll")
-    public @ResponseBody Iterable<Loan> getAllLoans(){
-        return loanService.getAllLoans();
+    public @ResponseBody Iterable<Loan> getAllLoansByUserId(@RequestParam Integer userId){
+
+        return loanService.getAllLoansByUserId(userId);
     }
 
     @GetMapping("/getAllLoansInfo")
@@ -68,8 +70,8 @@ public class LoanController {
     @PostMapping("/addMultipleLoans")
     @Transactional
     @CrossOrigin(origins = "http://localhost:3000")
-    public String addMultipleLoans( @RequestBody Integer[] bookIds) {
-        return loanService.AddMultipleLoans(bookIds);
+    public String addMultipleLoans( @RequestBody Integer[] bookIds,@RequestParam Integer userId) {
+        return loanService.AddMultipleLoans(bookIds, userId);
     }
 
 

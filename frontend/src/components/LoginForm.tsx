@@ -1,11 +1,10 @@
 import '../App.css';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, Snackbar, Alert} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { Formik, FormikHelpers } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-
 import loginImage from '../resources/login-background.jpg';
 
 interface LoginFormValues {
@@ -13,7 +12,16 @@ interface LoginFormValues {
   password: string;
 }
 
+type Severity = 'success' | 'error' | 'info' | 'warning';
+
 function LoginForm() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<Severity | undefined>(undefined);
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
   const navigate = useNavigate();
   const onSubmit = useCallback(
     (values: LoginFormValues, formik: FormikHelpers<LoginFormValues>) => {
@@ -28,18 +36,36 @@ function LoginForm() {
       })
         .then((response) => {
           if (response.ok) {
-            return response.text();
+            return response.json();
           } else {
             throw new Error('Login failed');
           }
         })
-        .then((token) => {
-          // Store the token, for example in localStorage
+        .then((data) => {
+          
+          const token = data.token;
+          const userId = data.userId;
+          const userRole = data.userRole;
+
           localStorage.setItem('token', token);
+          localStorage.setItem('userId', userId);
+          localStorage.setItem('userRole', userRole);
           navigate('/home');
+          console.log(token);
+          console.log(userId);
+          console.log(userRole)
+          
+        })
+        .then((text) => {
+          console.log('Server response:', text);
+          setSnackbarMessage('Book updated successfully');
+          setSnackbarSeverity('success');
+          setSnackbarOpen(true);
         })
         .catch((error) => {
-          alert('Wrong login or password');
+          setSnackbarMessage('Error: ' + error.message);
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
         });
     },
     [navigate],
@@ -144,6 +170,15 @@ function LoginForm() {
           </Box>
         )}
       </Formik>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert  onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

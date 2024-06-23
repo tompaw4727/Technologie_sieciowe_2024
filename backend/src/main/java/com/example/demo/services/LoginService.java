@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.LoginForm;
+import com.example.demo.dto.LoginResponseDTO;
 import com.example.demo.entities.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,8 +26,10 @@ public class LoginService {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     };
-    public String userLogin(LoginForm loginForm) {
+    public LoginResponseDTO userLogin(LoginForm loginForm) {
         User user = userService.getUserByUsername(loginForm.getLogin());
+        Integer userId = user.getUserId();
+        String userRole = user.getRole();
 
         if(passwordEncoder.matches(loginForm.getPassword(), user.getPassword())){
             long timeMillis = System.currentTimeMillis();
@@ -37,7 +40,7 @@ public class LoginService {
                     .claim("role", user.getRole())
                     .signWith(SignatureAlgorithm.HS256, key)
                     .compact();
-            return token;
+            return new LoginResponseDTO(token, userId, userRole);
         }else {
             return null;
         }

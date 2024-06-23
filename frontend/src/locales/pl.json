@@ -16,5 +16,23 @@
   "borrowDate": "Data wypożyczenia",
   "dueDate": "Termin oddania",
   "returnDate": "Data oddania",
-  "changeStatus": "Zmień status"
+  "changeStatus": "Zmień status",
+  "edit": "Edytuj",
+  "delete": "Usuń",
+  "loanHistory": "HIstoria wypożyczeń",
+  "addReview": "Dodaj recenzje",
+  "reviews": "Recenzje",
+  "homePageDescription": "Odkrywaj świat literatury z BookWorm bez wysiłku. Płynnie wypożyczaj, odkrywaj i zarządzaj książkami. Dla czytelników - łatwy dostęp do ogromnej kolekcji cyfrowej. Dla bibliotekarzy - wydajne narzędzia zarządzania. BookWorm to Twoja uproszczona brama do świata książek.",
+  "liblaryCollection": "Kolekcja Książek",
+  "loans": "Wypożyczenia",
+  "users": "Użytkownicy",
+  "booksInCart": "Książki w Koszyku",
+  "success": "Sukces",
+  "borrwoSuccess": "Książki zostały wypożyczone.",
+  "reviews": "Recenzje",
+  "users": "Użytkownicy",
+  "addUser": "Dodaj użytkownika",
+  "addBook": "Dodaj książkę"
+
+
 }

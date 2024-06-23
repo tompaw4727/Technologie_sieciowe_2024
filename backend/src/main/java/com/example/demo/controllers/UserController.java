@@ -33,6 +33,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{userId}")
+    @CrossOrigin(origins = "http://localhost:3000")
     @Transactional
     public String updateUSer(@PathVariable("userId") Integer userId,
                              @RequestBody UserDTO userDTO) {
@@ -40,8 +41,9 @@ public class UserController {
         return userService.updateUser(userId, userDTO);
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") Integer userId ){
+    @DeleteMapping("/delete")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public String deleteUser(@RequestParam Integer userId ){
         if(userService.checkIfUserExistById(userId)){
             throw new ResourceNotFoundException("User with that Id doesn't exists in database.");
         }else {
@@ -49,10 +51,15 @@ public class UserController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getAll")
     public @ResponseBody Iterable<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/getUserInfos") User getUserInfoByUseId(@RequestParam Integer userId){
+        return userService.getUserById(userId);
+    }
 
 }

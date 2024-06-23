@@ -16,7 +16,23 @@
   "borrowDate": "Borrow Date",
   "dueDate": "Due Date",
   "returnDate": "Return Date",
-  "changeStatus": "Change Status"
-
+  "changeStatus": "Change Status",
+  "edit": "Edit",
+  "delete": "Delete",
+  "loanHistory": "Loan Hisotory",
+  "addReview": "Add review",
+  "reviews": "Reviews",
+  "homePageDescription":"Effortlessly explore the world of literature with BookWorm. Seamlessly borrow, discover, and manage books. For readers, enjoy easy access to a vast digital collection. For librarians, benefit from efficient management tools. BookWorm is your simplified gateway to a world of books.",
+  "liblaryCollection": "Library Collection",
+  "loans": "Loans",
+  "users": "Users",
+  "booksInCart": "Books in Cart",
+  "checkout": "Checkout",
+  "success": "Succes",
+  "borrwoSuccess": "Books have been successfully borrowed.",
+  "reviews": "Reviews",
+  "users": "Users",
+  "addUser": "Add User",
+  "addBook": "Add Book"
 
 }

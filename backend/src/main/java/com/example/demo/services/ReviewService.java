@@ -22,7 +22,7 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public List<Review> getAllReviews () {
-        return reviewRepository.findAll();
+    public List<Review> getAllBookReviews (Integer bookId) {
+        return reviewRepository.findAllBookReviews(bookId);
     }
 }

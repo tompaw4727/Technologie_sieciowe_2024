@@ -12,8 +12,9 @@ import {
 } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { Formik, FormikHelpers } from 'formik';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import * as yup from 'yup';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import loginImage from '../resources/login-background.jpg';
 import MenuAppBar from './MenuAppBar';
@@ -29,26 +30,57 @@ interface BookFormValues {
   coverImageUrl: string;
   summary: string;
 }
-
 type Severity = 'success' | 'error' | 'info' | 'warning';
 
-function BookForm() {
+function BookEditForm() {
+  const { isbn } = useParams();
+  const [initialValues, setInitialValues] = useState<BookFormValues>({
+    isbn: '',
+    title: '',
+    author: '',
+    publisher: '',
+    publishYear: 0,
+    availableCopies: 0,
+    type: '',
+    coverImageUrl: '',
+    summary: '',
+  });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    Severity | undefined
-  >(undefined);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<Severity | undefined>(undefined);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
+  useEffect(() => {
+    fetch(`http://localhost:8080/book/getBookInfosByIsbn?isbn=${isbn}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setInitialValues({
+          isbn: data.isbn,
+          title: data.title,
+          author: data.author,
+          publisher: data.publisher,
+          publishYear: data.publishYear,
+          availableCopies: data.availableCopies,
+          type: data.type,
+          coverImageUrl: data.coverImageUrl,
+          summary: data.summary,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching book details:', error);
+      });
+  }, [isbn]);
+
+
   const onSubmit = useCallback(
     (values: BookFormValues, formik: FormikHelpers<BookFormValues>) => {
       const jsonData = JSON.stringify(values);
-      console.log(jsonData)
-      fetch('http://localhost:8080/book/addBookWithDetails', {
-        method: 'POST',
+
+      fetch('http://localhost:8080/book/updateBookWithDetails', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -59,12 +91,14 @@ function BookForm() {
             return response.text();
           } else {
             return response.json().then((error) => {
-              throw new Error(error.message || "Invalid input, please try again");
+              console.error('Server error:', error);
+              throw new Error(error.message || 'Invalid input, please try again');
             });
           }
         })
         .then((text) => {
-          setSnackbarMessage('Book added successfully');
+          console.log('Server response:', text);
+          setSnackbarMessage('Book updated successfully');
           setSnackbarSeverity('success');
           setSnackbarOpen(true);
         })
@@ -92,7 +126,8 @@ function BookForm() {
       }),
     [],
   );
-
+  console.log(initialValues.isbn);
+  console.log(initialValues.type);
   return (
     <Box>
       <MenuAppBar />
@@ -106,21 +141,12 @@ function BookForm() {
         }}
       >
         <Formik
-          initialValues={{
-            isbn: '',
-            title: '',
-            author: '',
-            publisher: '',
-            publishYear: 0,
-            availableCopies: 0,
-            type: '',
-            coverImageUrl: '',
-            summary: '',
-          }}
+          initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
           validateOnChange
           validateOnBlur
+          enableReinitialize
         >
           {(formik: any) => (
             <Box
@@ -149,6 +175,7 @@ function BookForm() {
                   label="Isbn"
                   variant="standard"
                   name="isbn"
+                  value={formik.values.isbn}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.isbn && Boolean(formik.errors.isbn)}
@@ -161,6 +188,7 @@ function BookForm() {
                   label="Title"
                   variant="standard"
                   name="title"
+                  value={formik.values.title}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.title && Boolean(formik.errors.title)}
@@ -173,6 +201,7 @@ function BookForm() {
                   label="Author"
                   variant="standard"
                   name="author"
+                  value={formik.values.author}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.author && Boolean(formik.errors.author)}
@@ -185,6 +214,7 @@ function BookForm() {
                   label="Publisher"
                   variant="standard"
                   name="publisher"
+                  value={formik.values.publisher}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
@@ -201,6 +231,7 @@ function BookForm() {
                   label="Publish Year"
                   variant="standard"
                   name="publishYear"
+                  value={formik.values.publishYear}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
@@ -218,6 +249,7 @@ function BookForm() {
                   label="Available Copies"
                   variant="standard"
                   name="availableCopies"
+                  value={formik.values.availableCopies}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
@@ -236,6 +268,7 @@ function BookForm() {
                   label="Cover Image Url"
                   variant="standard"
                   name="coverImageUrl"
+                  value={formik.values.coverImageUrl}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
@@ -253,6 +286,7 @@ function BookForm() {
                   label="Summary"
                   variant="standard"
                   name="summary"
+                  value={formik.values.summary}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
@@ -297,7 +331,7 @@ function BookForm() {
                   disabled={!formik.isValid && formik.dirty}
                   fullWidth
                 >
-                  Add Book
+                  Edit Book
                 </Button>
               </form>
             </Box>
@@ -309,11 +343,7 @@ function BookForm() {
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
       >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          sx={{ width: '100%' }}
-        >
+        <Alert  onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
@@ -321,4 +351,4 @@ function BookForm() {
   );
 }
 
-export default BookForm;
+export default BookEditForm;

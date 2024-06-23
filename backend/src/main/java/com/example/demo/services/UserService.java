@@ -61,6 +61,11 @@ public class UserService {
         return optionalUser.orElse(null);
     }
 
+    public User getUserById(Integer id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.orElse(null);
+    }
+
     public String updateUser(Integer userId, UserDTO userDTO) {
         User user  = userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException("User with that Id doesn't exists in database"));

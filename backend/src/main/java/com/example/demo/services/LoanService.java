@@ -56,8 +56,13 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
-    public List<Loan> getAllLoans () {
+    public List<Loan> getAllLoans() {
         return loanRepository.findAll();
+    }
+
+    public List<Loan> getAllLoansByUserId(Integer userId) {
+
+        return loanRepository.findAllUserLoans(userId);
     }
 
     public List<Loan> getLoansHistoryOfUser(Integer userId) {
@@ -99,12 +104,11 @@ public class LoanService {
         return loanRepository.getAllLoansInfo();
     }
 
-    public String AddMultipleLoans(Integer[] BooksIds) {
+    public String AddMultipleLoans(Integer[] BooksIds, Integer userId) {
         LocalDate borrowDate = LocalDate.now();
         LocalDate dueDate = borrowDate.plusMonths(2);
-        Integer readerId = 1;
 
-        Optional<User> userOptional = userRepository.findById(readerId);
+        Optional<User> userOptional = userRepository.findById(userId);
         if (!userOptional.isPresent()) {
             return "User not found";
         }

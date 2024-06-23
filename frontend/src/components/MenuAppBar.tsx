@@ -1,10 +1,9 @@
 import { AppBar, IconButton, Toolbar, Typography, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import GTranslateIcon from '@mui/icons-material/GTranslate';
 import { AccountCircle } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import HomeIcon from '@mui/icons-material/Home';
 
 
 export default function MenuAppBar() {
@@ -21,18 +20,21 @@ export default function MenuAppBar() {
     <>
     <AppBar position="sticky">
       <Toolbar className='Navbar'>
+        <Typography variant="h6"  sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none' }} component={Link}
+            to="/loanHistory">
+          {t("loanHistory")}
+        </Typography>
         <IconButton
           size="large"
-          edge="start"
           color="inherit"
-          aria-label="menu"
+          aria-label="account"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={() => {navigate("/home")}}
           sx={{ mr: 2 }}
         >
-          <MenuIcon />
+          <HomeIcon />
         </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {t("library")}
-        </Typography>
         <Box>
         <IconButton
           size="large"

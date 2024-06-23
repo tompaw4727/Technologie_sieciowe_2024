@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -10,9 +11,11 @@ public class Review {
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private Integer reviewId;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "book_id")
     private Book book;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
     private Integer score;

@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dto.LoginForm;
+import com.example.demo.dto.LoginResponseDTO;
 import com.example.demo.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,13 @@ public class LoginController {
      }
      @PostMapping("/login")
      @CrossOrigin(origins = "http://localhost:3000")
-     public ResponseEntity<String> login(@RequestBody LoginForm loginForm){
-         String token = loginService.userLogin(loginForm);
-         if(token==null){
+     public ResponseEntity login(@RequestBody LoginForm loginForm){
+         LoginResponseDTO loginResponseDTO = loginService.userLogin(loginForm);
+
+         if(loginResponseDTO.getToken()==null){
              return new ResponseEntity<>("Wrong login or password", HttpStatus.UNAUTHORIZED);
          }else {
-             return new ResponseEntity<>(token, HttpStatus.OK);
+             return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
          }
      }
-
-
 }

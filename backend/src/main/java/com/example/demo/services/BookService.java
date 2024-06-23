@@ -44,45 +44,52 @@ public class BookService {
         }
 
     }
+    public Book getBookByIsbn(String isbn) {
+        return  bookRepository.findByIsbn(isbn);
+    }
 
-    public String updateBook(Integer bookId, BookDTO bookDTO) {
+    public Book getBookById(Integer id) {
+        return bookRepository.findById2(id);
+    }
+
+    public String updateBook(Integer bookId, Book oldBook) {
         Book book = bookRepository.findById(bookId).orElseThrow(() ->
                 new ResourceNotFoundException("Book with that Id doesn't exists in database"));
 
-        if (bookDTO.getIsbn() == null) {
+        if (oldBook.getIsbn() == null) {
             book.setIsbn(book.getIsbn());
         }else {
-            book.setIsbn(bookDTO.getIsbn());
+            book.setIsbn(oldBook.getIsbn());
         }
 
-        if (bookDTO.getTitle() == null) {
+        if (oldBook.getTitle() == null) {
             book.setTitle(book.getTitle());
         }else {
-            book.setTitle(bookDTO.getTitle());
+            book.setTitle(oldBook.getTitle());
         }
 
-        if (bookDTO.getAuthor() == null) {
+        if (oldBook.getAuthor() == null) {
             book.setAuthor(book.getAuthor());
         }else {
-            book.setAuthor(bookDTO.getAuthor());
+            book.setAuthor(oldBook.getAuthor());
         }
 
-        if (bookDTO.getPublisher() == null) {
+        if (oldBook.getPublisher() == null) {
             book.setPublisher(book.getPublisher());
         }else {
-            book.setPublisher(bookDTO.getPublisher());
+            book.setPublisher(oldBook.getPublisher());
         }
 
-        if (bookDTO.getPublishYear() == null) {
+        if (oldBook.getPublishYear() == null) {
             book.setPublishYear(book.getPublishYear());
         }else {
-            book.setPublishYear(bookDTO.getPublishYear());
+            book.setPublishYear(oldBook.getPublishYear());
         }
 
-        if (bookDTO.getAvailableCopies() == null) {
+        if (oldBook.getAvailableCopies() == null) {
             book.setAvailableCopies(book.getAvailableCopies());
         }else {
-            book.setAvailableCopies(bookDTO.getAvailableCopies());
+            book.setAvailableCopies(oldBook.getAvailableCopies());
         }
 
 
